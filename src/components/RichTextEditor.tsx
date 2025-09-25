@@ -14,7 +14,7 @@ import {
   SelectValue 
 } from '@/components/ui/select'
 import { useToast } from '@/hooks/use-toast'
-import { supabase, Note } from '@/lib/supabase'
+import { supabase } from '@/integrations/supabase/client'
 import { useAuth } from '@/contexts/AuthContext'
 import { 
   Bold, 
