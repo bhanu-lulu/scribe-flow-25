@@ -15,6 +15,7 @@ import {
 } from '@/components/ui/select'
 import { useToast } from '@/hooks/use-toast'
 import { supabase } from '@/integrations/supabase/client'
+import type { Database } from '@/integrations/supabase/types'
 import { useAuth } from '@/contexts/AuthContext'
 import { 
   Bold, 
@@ -29,6 +30,8 @@ import {
   Type,
   Palette
 } from 'lucide-react'
+
+type Note = Database['public']['Tables']['notes']['Row']
 
 const availableTags = ['Work', 'Personal', 'Learning', 'Ideas', 'Other']
 
@@ -50,7 +53,7 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
   const { user } = useAuth()
   const { toast } = useToast()
   const [title, setTitle] = useState(note.title)
-  const [selectedTags, setSelectedTags] = useState<string[]>(note.tags)
+  const [selectedTags, setSelectedTags] = useState<string[]>(note.tags || [])
   const [saving, setSaving] = useState(false)
 
   const editor = useEditor({

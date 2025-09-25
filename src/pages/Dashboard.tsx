@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Navigate } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 import { supabase } from '@/integrations/supabase/client'
+import type { Database } from '@/integrations/supabase/types'
 import { useToast } from '@/hooks/use-toast'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -34,6 +35,8 @@ import {
   X
 } from 'lucide-react'
 import RichTextEditor from '@/components/RichTextEditor'
+
+type Note = Database['public']['Tables']['notes']['Row']
 
 const availableTags = ['Work', 'Personal', 'Learning', 'Ideas', 'Other']
 
@@ -97,7 +100,7 @@ const Dashboard = () => {
 
     // Filter by tag
     if (selectedTag !== 'All') {
-      filtered = filtered.filter(note => note.tags.includes(selectedTag))
+      filtered = filtered.filter(note => (note.tags || []).includes(selectedTag))
     }
 
     setFilteredNotes(filtered)
@@ -277,16 +280,16 @@ const Dashboard = () => {
                       </p>
                     )}
                     
-                    {note.tags.length > 0 && (
+                    {(note.tags || []).length > 0 && (
                       <div className="flex flex-wrap gap-1 mb-2">
-                        {note.tags.slice(0, 2).map(tag => (
+                        {(note.tags || []).slice(0, 2).map(tag => (
                           <Badge key={tag} variant="secondary" className="text-xs px-1 py-0">
                             {tag}
                           </Badge>
                         ))}
-                        {note.tags.length > 2 && (
+                        {(note.tags || []).length > 2 && (
                           <Badge variant="secondary" className="text-xs px-1 py-0">
-                            +{note.tags.length - 2}
+                            +{(note.tags || []).length - 2}
                           </Badge>
                         )}
                       </div>
